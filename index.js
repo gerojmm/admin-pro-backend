@@ -10,17 +10,22 @@ const app = express();
 //COnfigura CORS
 app.use(cors());
 
+//Lectura y parseo del body
+app.use(express.json());
+
 
 //DB Connection
 dbConnection();
 
 //Rutas
-app.get('/', (req, res) => {
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'));
+/* app.get('/', (req, res) => {
     res.json({
         ok: true,
         msg: 'Hola Mundo'
     })
-}); 
+});  */
 
 app.listen(process.env.PORT, () => {
     console.log(`Servidor escuchando por el puerto ${ process.env.PORT }`);
