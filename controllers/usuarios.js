@@ -3,17 +3,27 @@ const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 
 const getUsuarios = async(req, res) => {
+    const desde = Number(req.query.desde) || 0;
     
-    const usuarios = await Usuario.find();
+    const [usuarios, total] = await Promise.all([
+        Usuario
+            .find()
+            .skip(desde)
+            .limit(5),
+        Usuario
+            .count()
+    ]);
+
     res.json({
         ok: true,
-        usuarios
+        usuarios,
+        total
     });
 }
 
 const createUsuarios = async (req, res) => {
 
-    const { name, password, email} = req.body;
+    const { password, email} = req.body;
 
     try {
 
@@ -35,7 +45,7 @@ const createUsuarios = async (req, res) => {
         await usuario.save();
 
         //Generar token
-        const token = await generateJWT(usuario.uid);
+        const token = await generateJWT(usuario.id);
 
         res.json({
             ok: true,
