@@ -2,7 +2,6 @@ const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_ID);
 
 const googleVerify = async(token) => {
-  console.log(':::token', token);
   const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_ID,  // Specify the CLIENT_ID of the app that accesses the backend
@@ -14,7 +13,6 @@ const googleVerify = async(token) => {
   // If request specified a G Suite domain:
   // const domain = payload['hd'];
   const { name, email, picture } = payload;
-  console.log({ name, email, picture });
   return { name, email, picture };
 }
 

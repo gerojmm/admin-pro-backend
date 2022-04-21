@@ -34,7 +34,6 @@ const updateImage = async (tipo, id,  nombreArchivo) => {
             break;
         case 'hospitales':
             const hospital = await Hospital.findById(id);
-            console.log(':::hospital', hospital);
             if (!hospital) {
                 return false;
             }

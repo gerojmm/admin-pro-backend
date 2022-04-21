@@ -37,18 +37,66 @@ const createMedicos = async (req, res) => {
 
 };
 
-const updateMedicos = (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'it works'
-    });
+const updateMedicos = async (req, res) => {
+    const id = req.params.uid;
+    
+
+    try {
+        const medico = await Medico.findById(id);
+        if (!medico) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Medico no encontrado'
+            });
+        } 
+
+        const dataMedico = {
+            ...req.body,
+            usuario: req.uid
+        }
+
+        const medicoUpdated = await Medico.findByIdAndUpdate(id, dataMedico, { new: true })
+
+        res.json({
+            ok: true,
+            msg: 'Medico Actualizado',
+            medicoUpdated
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Se ha producido un error'
+        });
+    }
+
+
 }
 
-const deleteMedicos = (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'it works'
-    });
+const deleteMedicos = async (req, res) => {
+    const id = req.params.uid;
+
+    try {
+        const medico = await Medico.findById(id);
+        if (!medico) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Medico no encontrado'
+            });
+        } 
+
+        await Medico.findByIdAndDelete(id);
+        
+        res.json({
+            ok: true,
+            msg: 'Medico Eliminado'
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Se ha producido un error'
+        });
+    };
 };
 
 

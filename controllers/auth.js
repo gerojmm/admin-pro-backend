@@ -48,7 +48,6 @@ const googleSignIn = async (req, res) => {
     
     try {
         const { name, email, picture } = await googleVerify(googleToken);
-        console.log(':::data', { name, email, picture });
         const usuarioDB = await Usuario.findOne({ email });
         let usuario;
         if (!usuarioDB) {
@@ -80,7 +79,17 @@ const googleSignIn = async (req, res) => {
     }
 }
 
+
+const renewToken =  async (req, res) => {
+    const uid = req.uid;
+    const token = await generateJWT(uid);
+    res.json({
+        ok: true
+    });
+}
+
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    renewToken
 }
