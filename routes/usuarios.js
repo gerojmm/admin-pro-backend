@@ -7,6 +7,7 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const { getUsuarios, createUsuarios, updateUsuario, deleteUsuario } = require('../controllers/usuarios');
 
 const router = Router();
+    
 
 router.get('/', validarJWT, getUsuarios);
 

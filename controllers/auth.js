@@ -27,11 +27,11 @@ const login = async(req, res) => {
             });
         }
 
-        const token = await generateJWT(existeEmail.uid);
+        const token = await generateJWT(existeEmail.id);
 
         res.status(200).json({
             ok: true,
-            msg: token
+            token
         });
     } catch (error) {
         res.status(500).json({
@@ -64,7 +64,7 @@ const googleSignIn = async (req, res) => {
         }
 
         await usuario.save();
-        const token = await generateJWT(usuarioDB.uid);
+        const token = await generateJWT(usuarioDB.id);
 
         res.status(200).json({
             ok: true,
@@ -82,9 +82,13 @@ const googleSignIn = async (req, res) => {
 
 const renewToken =  async (req, res) => {
     const uid = req.uid;
+
     const token = await generateJWT(uid);
+    const usuarioDB = await Usuario.findById(uid);
     res.json({
-        ok: true
+        ok: true,
+        token,
+        usuarioDB
     });
 }
 

@@ -24,7 +24,6 @@ const getUsuarios = async(req, res) => {
 const createUsuarios = async (req, res) => {
 
     const { password, email} = req.body;
-
     try {
 
         const existeEmail = await Usuario.findOne({ email });
@@ -86,6 +85,15 @@ const updateUsuario = async( req, res ) => {
                     msg: 'Correo ya registrado'
                 });
             }
+        }
+
+        if (!existeUsuario.google) {
+            campos.email = email
+        } else if (existeUsuario.email !== email) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'No se puede cambiar un usuario de Google'
+            });
         }
 
         const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, { new: true});
